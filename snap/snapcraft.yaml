@@ -6,7 +6,7 @@ description: |
   This is the nginx webserver packaged as a snap.
 
   All configuration data, logs and the html root can be found under
-  /var/snap/nginx/common
+  /var/snap/nginx/common/nginx
 
 grade: stable
 confinement: strict
