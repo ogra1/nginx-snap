@@ -1,0 +1,15 @@
+#! /bin/sh
+
+if [ ! -e /usr/nginx/conf/nginx.conf ]; then
+  mkdir /usr/nginx/conf
+  cp -a $SNAP/usr/nginx/conf/* /usr/nginx/conf/
+fi
+
+if [ ! -e /usr/nginx/html/index.html ]; then
+  mkdir /usr/nginx/html
+  cp -a $SNAP/usr/nginx/html/* /usr/nginx/html/
+fi
+
+if [ ! -e /usr/nginx/logs ]; then
+  mkdir /usr/nginx/logs
+fi

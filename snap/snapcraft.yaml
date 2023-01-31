@@ -1,0 +1,47 @@
+name: nginx
+base: core22
+adopt-info: nginx
+summary: the nginx webserver in a snap
+description: |
+  This is the nginx webserver packaged as a snap.
+
+  All configuration data, logs and the html root can be found under
+  /var/snap/nginx/common
+
+grade: stable
+confinement: strict
+
+apps:
+  nginx:
+    command: usr/nginx/sbin/nginx
+    daemon: simple
+    plugs:
+      - network
+      - network-bind
+
+layout:
+  /usr/nginx:
+    bind: $SNAP_COMMON/nginx
+
+parts:
+  nginx:
+    source: https://github.com/nginx/nginx.git
+    plugin: autotools
+    autotools-configure-parameters:
+      - --prefix=/usr/nginx
+    build-packages:
+      - libgd3
+      - libgeoip1
+      - libpcre3
+      - libssl3
+      - libxml2
+      - libxslt1.1
+      - zlib1g
+    override-build: |
+      cp auto/configure .
+      craftctl default
+      VER="$(objs/nginx -v 2>&1|sed 's;^.*/;;g')"
+      craftctl set version="$VER"
+      sed -i 's/#user.*$/user root;\ndaemon off;/' $CRAFT_PART_INSTALL/usr/nginx/conf/nginx.conf
+    prime:
+      - -usr/nginx/logs
